@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem pemesanan chommell farm</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Sistem Pemesanan Modern</p>
+          <h1>Pilih Menu, Terima Nomor Antrian, Bayar via Dana dan QRIS</h1>
+          <p>Cukup pilih menu favorit Anda, dapatkan nomor antrean, dan lanjutkan pembayaran dengan Dana atau QRIS.</p>
+        </div>
+      </header>
+
+      <section class="login-screen" id="loginScreen">
+        <div class="login-card">
+          <h2>Masuk ke halaman</h2>
+          <p>Pilih peran Anda untuk mulai menggunakan website.</p>
+          <div class="login-buttons">
+            <button id="buyerLoginBtn" class="login-btn buyer-btn">Masuk sebagai Pembeli</button>
+            <button id="sellerStepBtn" class="login-btn seller-btn">Masuk sebagai Penjual</button>
+          </div>
+          <div class="seller-form hidden" id="sellerForm">
+            <label for="adminEmail">Masukkan Email Penjual</label>
+            <input id="adminEmail" type="email" placeholder="kopigula@gmail.com" />
+            <button id="adminLoginBtn" class="primary-btn">Login Admin</button>
+          </div>
+          <p class="login-note">Login admin hanya bisa menggunakan email yang benar.</p>
+        </div>
+      </section>
+
+      <main class="grid hidden" id="appMain">
+        <section class="card seller-card hidden" id="sellerPanel">
+          <div class="seller-panel-header">
+            <div>
+              <h2>Kang Slamet</h2>
+              <p>Tambah produk baru untuk ditampilkan ke pembeli.</p>
+            </div>
+            <div class="seller-panel-actions">
+              <button id="sellerBackBtn" class="secondary-btn seller-back-btn">Kembali</button>
+            </div>
+          </div>
+          <div class="seller-panel-nav">
+            <button id="sellerNavMenuBtn" class="secondary-btn">Menu Produk</button>
+            <button id="openQueuePageBtn" class="secondary-btn seller-nav-btn">Daftar Nama & Nomor Antrian</button>
+            <button id="printReceiptBtn" class="secondary-btn seller-nav-btn">Cetak Struk (JPG)</button>
+            <button id="sellerNavQrisBtn" class="secondary-btn">Grafik Pembayaran via QRIS</button>
+            <button id="sellerNavTopBtn" class="secondary-btn">Produk Terlaris</button>
+          </div>
+          <div class="seller-queue-refresh">
+            <button id="refreshQueueBtn" class="refresh-queue-btn">Refresh Nomor Antrian</button>
+            <span id="queuePreviewText" class="queue-preview-text">Nomor antrean selanjutnya: -</span>
+            <span id="buyerNamePreviewText" class="buyer-name-preview"><strong>Nama pembeli:</strong> -</span>
+          </div>
+          <div class="seller-form-box">
+            <div class="field-group">
+              <label for="productName">Nama Produk</label>
+              <input id="productName" type="text" placeholder="Contoh: Ayam Kampung" />
+            </div>
+            <div class="field-group">
+              <label for="productCategory">Kategori</label>
+              <select id="productCategory">
+                <option value="makanan">Makanan & Minuman</option>
+                <option value="ikan">Ikan Hias & Akuarium</option>
+                <option value="unggas">Unggas & Aksesorisnya</option>
+                <option value="pribadi">Aksesoris Pribadi</option>
+                <option value="kamar">Aksesoris Kamar Tidur</option>
+                <option value="lainnya">Bibit Sayuran</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="productPrice">Harga</label>
+              <input id="productPrice" type="number" placeholder="Contoh: 35000" />
+            </div>
+            <div class="field-group">
+              <label for="productImage">URL Gambar Produk (opsional)</label>
+              <input id="productImage" type="url" placeholder="https://example.com/produk.jpg" />
+              <label for="productImageFile">Atau pilih dari galeri</label>
+              <input id="productImageFile" type="file" accept="image/*" />
+            </div>
+            <div class="field-group">
+              <label for="productVariations">Variasi produk (pisah dengan koma, opsional)</label>
+              <input id="productVariations" type="text" placeholder="Contoh: S,M,L atau Merah,Hijau,Biru" />
+            </div>
+            <div class="seller-form-actions">
+                <button id="addProductBtn" class="primary-btn">Tambah Produk</button>
+                <button id="saveProductBtn" class="secondary-btn hidden">Simpan Perubahan</button>
+            </div>
+          </div>
+          <div id="sellerMenuSection">
+            <div class="seller-alert muted">Produk akan muncul setelah ditambahkan.</div>
+            <div class="seller-products-list" id="sellerProductsList"></div>
+          </div>
+          <div id="sellerQrisSection" class="hidden seller-content-section">
+            <div class="seller-page-header">
+              <h3>Grafik Pembayaran via QRIS (12 bulan)</h3>
+              <div class="seller-page-actions">
+                <button id="exportExcelBtn" class="secondary-btn">Ekspor ke Excel</button>
+              </div>
+            </div>
+            <img id="chartIncomeQrisImg" class="chart-image hidden" alt="Grafik QRIS" />
+            <canvas id="chartIncomeQris" width="400" height="180" class="hidden"></canvas>
+          </div>
+          <div id="sellerTopSection" class="hidden seller-content-section">
+            <div class="seller-page-header">
+              <h3>Produk Terlaris (12 bulan)</h3>
+            </div>
+            <img id="chartTopProductsImg" class="chart-image hidden" alt="Produk Terlaris" />
+            <canvas id="chartTopProducts" width="400" height="180" class="hidden"></canvas>
+          </div>
+          <div id="sellerAnalyticsSection" class="hidden seller-content-section">
+            <div class="transactions-analytics">
+              <label for="txnAggSelect">Analitik Transaksi:</label>
+              <select id="txnAggSelect">
+                <option value="dayOfWeek">Per Hari (nama hari)</option>
+                <option value="daily" selected>Per Tanggal (30 hari terakhir)</option>
+                <option value="monthly">Per Bulan (12 bulan terakhir)</option>
+                <option value="yearly">Per Tahun</option>
+              </select>
+              <canvas id="chartTransactions" width="600" height="240"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="card hidden" id="sellerQueuePage">
+          <div class="seller-queue-header">
+            <button id="closeQueuePageBtn" class="secondary-btn">Kembali</button>
+            <h2>Daftar Nama & Nomor Antrian</h2>
+            <p class="muted">Urutan nama dan nomor mulai dari 001. Tombol "Refresh Nomor Antrian" akan mengosongkan daftar ini.</p>
+          </div>
+          <div class="seller-queue-content">
+            <ol id="queueList" class="queue-list"></ol>
+          </div>
+        </section>
+
+        <section class="card payment-card">
+          <h2>Menu Produk</h2>
+          <div class="category-tabs" role="tablist" aria-label="Kategori produk">
+            <button class="category-tab active" data-filter="all">Semua</button>
+            <button class="category-tab" data-filter="makanan">Makanan & Minuman</button>
+            <button class="category-tab" data-filter="ikan">Ikan Hias & Akuarium</button>
+            <button class="category-tab" data-filter="unggas">Unggas & Aksesorisnya</button>
+            <button class="category-tab" data-filter="pribadi">Aksesoris Pribadi</button>
+            <button class="category-tab" data-filter="kamar">Aksesoris Kamar Tidur</button>
+            <button class="category-tab" data-filter="lainnya">Bibit Sayuran</button>
+          </div>
+          <div class="category-block" data-category-group="makanan">
+            <h3>Makanan & Minuman</h3>
+            <div class="menu-list"></div>
+          </div>
+
+          <div class="category-block" data-category-group="ikan">
+            <h3>Ikan Hias & Perlengkapan Akuarium</h3>
+            <div class="menu-list"></div>
+          </div>
+
+          <div class="category-block" data-category-group="unggas">
+            <h3>Unggas & Aksesorisnya</h3>
+            <div class="menu-list"></div>
+          </div>
+
+          <div class="category-block" data-category-group="pribadi">
+            <h3>Aksesoris Pribadi</h3>
+            <div class="menu-list"></div>
+          </div>
+
+          <div class="category-block" data-category-group="kamar">
+            <h3>Aksesoris Kamar Tidur</h3>
+            <div class="menu-list"></div>
+          </div>
+
+          <div id="orderControls">
+            <div class="field-group">
+              <label for="customerName">Nama Pemesan</label>
+              <input id="customerName" type="text" placeholder="Contoh: Wulandari" />
+            </div>
+
+            <div class="field-group notes-group hidden" id="notesGroup">
+              <label for="notes">Catatan</label>
+              <textarea id="notes" rows="3" placeholder="Opsional: tanpa sambal, lebih pedas"></textarea>
+            </div>
+
+            <div class="field-group delivery-group hidden" id="deliveryGroup">
+              <label for="deliveryAddress">Delivery (opsional) - Alamat lengkap</label>
+              <textarea id="deliveryAddress" rows="2" placeholder="Alamat lengkap untuk pengantaran (opsional)"></textarea>
+            </div>
+
+            <button id="orderBtn" class="primary-btn">Buat Pesanan & Kirim WhatsApp</button>
+          </div>
+        </section>
+
+        <section class="card result-card">
+          <h2>Ringkasan Pesanan</h2>
+          <div id="summary" class="summary-box">
+            <p class="muted">Belum ada pesanan.</p>
+          </div>
+
+          <div class="queue-box">
+            <p class="label">Nomor Antrian</p>
+            <div id="queueNumber" class="queue-number">-</div>
+            <p id="statusText" class="status">Mohon tunggu pesanan Anda Sedang Diproses</p>
+          </div>
+
+          <div class="payment-actions">
+            <button id="payBtn" class="secondary-btn qris-btn" disabled>Bayar via Dana</button>
+            <a id="qrisBtn" class="qris-btn" href="https://photos.app.goo.gl/Bw2TnpoNa7uG3Khc9" target="_blank" rel="noopener noreferrer">Bayar via QRIS</a>
+          </div>
+          <div class="qris-card">
+            <img class="qris-image" src="https://photos.app.goo.gl/Bw2TnpoNa7uG3Khc9" alt="Kode QRIS pembayaran" loading="eager" decoding="async" />
+            <p class="qris-caption">Scan kode QRIS Fauzi Farm untuk pembayaran cepat dan aman.</p>
+          </div>
+          <p id="paymentInfo" class="payment-info">Pilih pesanan terlebih dahulu untuk melanjutkan pembayaran.</p>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

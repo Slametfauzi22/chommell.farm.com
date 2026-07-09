@@ -1,0 +1,13 @@
+# Ignore common system files
+.DS_Store
+Thumbs.db
+
+# Ignore editor files
+.vscode/
+*.swp
+*~
+
+# Ignore node artifacts if added later
+node_modules/
+npm-debug.log
+package-lock.json
