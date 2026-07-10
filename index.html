@@ -64,18 +64,18 @@
             <div class="field-group">
               <label for="productCategory">Kategori</label>
               <select id="productCategory">
-                <option value="makanan dan minuman">Makanan & Minuman</option>
-                <option value="ikan hias dan akuarium">Ikan Hias & Akuarium</option>
-                <option value="unggas dan aksesorisnya">Unggas & Aksesorisnya</option>
-                <option value="aksesoris pribadi">Aksesoris Pribadi</option>
-                <option value="kelengkapan kamar">Aksesoris Kamar Tidur</option>
-                <option value="tanaman">Bibit Sayuran</option>
-                <option value="barang pribadi"> perangkat keras, elektronik</option>
+                <option value="makanan">Makanan & Minuman</option>
+                <option value="ikan">Ikan Hias & Akuarium</option>
+                <option value="unggas">Unggas & Aksesorisnya</option>
+                <option value="pribadi">Aksesoris Pribadi</option>
+                <option value="kamar">Aksesoris Kamar Tidur</option>
+                <option value="lainnya">Bibit Sayuran</option>
+        
               </select>
             </div>
             <div class="field-group">
               <label for="productPrice">Harga</label>
-              <input id="productPrice" type="number" placeholder="Contoh: 35000" />
+              <input id="productPrice" type="number" placeholder="Contoh: 50000" />
             </div>
             <div class="field-group">
               <label for="productImage">URL Gambar Produk (opsional)</label>
@@ -85,7 +85,7 @@
             </div>
             <div class="field-group">
               <label for="productVariations">Variasi produk (pisah dengan koma, opsional)</label>
-              <input id="productVariations" type="text" placeholder="Contoh: S,M,L atau Merah,Hijau,Biru" />
+              <input id="productVariations" type="text" placeholder="Contoh:manis seperti penjual." />
             </div>
             <div class="seller-form-actions">
                 <button id="addProductBtn" class="primary-btn">Tambah Produk</button>
@@ -142,35 +142,35 @@
           <h2>Menu Produk</h2>
           <div class="category-tabs" role="tablist" aria-label="Kategori produk">
             <button class="category-tab active" data-filter="all">Semua</button>
-            <button class="category-tab" data-filter="makanan dan minuman">Makanan & Minuman</button>
-            <button class="category-tab" data-filter="ikan hias dan akuarium">Ikan Hias & Akuarium</button>
-            <button class="category-tab" data-filter="unggas dan aksesorisnya">Unggas & Aksesorisnya</button>
-            <button class="category-tab" data-filter="kelengkapan pribadi">Aksesoris Pribadi</button>
-            <button class="category-tab" data-filter="aksesoris kamar">Aksesoris Kamar Tidur</button>
-            <button class="category-tab" data-filter="tanaman">Bibit Sayuran</button>
-            <button class="category-tab" data-filter="barang pribadi">perangkat keras, elektronik</button>
+            <button class="category-tab" data-filter="makanan">Makanan & Minuman</button>
+            <button class="category-tab" data-filter="ikan">Ikan Hias & Akuarium</button>
+            <button class="category-tab" data-filter="unggas">Unggas & Aksesorisnya</button>
+            <button class="category-tab" data-filter="pribadi">Aksesoris Pribadi</button>
+            <button class="category-tab" data-filter="kamar">Aksesoris Kamar Tidur</button>
+            <button class="category-tab" data-filter="lainnya">Bibit Sayuran</button>
+            <button class="category-tab" data-filter="barang">perangkat keras, elektronik</button>
           </div>
-          <div class="category-block" data-category-group="makanan dan minuman">
+          <div class="category-block" data-category-group="makanan">
             <h3>Makanan & Minuman</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="ikan hias dan akuarium">
+          <div class="category-block" data-category-group="ikan">
             <h3>Ikan Hias & Perlengkapan Akuarium</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="unggas dan aksesoris">
+          <div class="category-block" data-category-group="unggas">
             <h3>Unggas & Aksesorisnya</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="kelengkapan pribadi">
+          <div class="category-block" data-category-group="pribadi">
             <h3>Aksesoris Pribadi</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="aksesoris kamar">
+          <div class="category-block" data-category-group="kamar">
             <h3>Aksesoris Kamar Tidur</h3>
             <div class="menu-list"></div>
           </div>
