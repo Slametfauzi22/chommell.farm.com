@@ -10,7 +10,7 @@
     <div class="container">
       <header class="hero">
         <div>
-          <p class="eyebrow">Sistem Pemesanan Modern</p>
+          <p class="eyebrow">Sistem Pemesanan <i><u>Chommell Farm Kendaldoyong</u></i></p>
           <h1>Pilih Menu, Terima Nomor Antrian, Bayar via Dana dan QRIS</h1>
           <p>Cukup pilih menu favorit Anda, dapatkan nomor antrean, dan lanjutkan pembayaran dengan Dana atau QRIS.</p>
         </div>
@@ -18,7 +18,7 @@
 
       <section class="login-screen" id="loginScreen">
         <div class="login-card">
-          <h2>Masuk ke halaman</h2>
+          <h2>Masuk ke halaman Chommell Untuk memulai</h2>
           <p>Pilih peran Anda untuk mulai menggunakan website.</p>
           <div class="login-buttons">
             <button id="buyerLoginBtn" class="login-btn buyer-btn">Masuk sebagai Pembeli</button>
@@ -26,10 +26,10 @@
           </div>
           <div class="seller-form hidden" id="sellerForm">
             <label for="adminEmail">Masukkan Email Penjual</label>
-            <input id="adminEmail" type="email" placeholder="kopigula@gmail.com" />
+            <input id="adminEmail" type="email" placeholder="Stay Halal.com" />
             <button id="adminLoginBtn" class="primary-btn">Login Admin</button>
           </div>
-          <p class="login-note">Login admin hanya bisa menggunakan email yang benar.</p>
+          <p class="login-note">Hanya Admin Yang Dapat Mengakses Halaman Ini.</p>
         </div>
       </section>
 
@@ -37,8 +37,8 @@
         <section class="card seller-card hidden" id="sellerPanel">
           <div class="seller-panel-header">
             <div>
-              <h2>Kang Slamet</h2>
-              <p>Tambah produk baru untuk ditampilkan ke pembeli.</p>
+              <h2>Kang Slamet Fauzi</h2>
+              <p>Welcome Back To Chommell Farm Kendal.</p>
             </div>
             <div class="seller-panel-actions">
               <button id="sellerBackBtn" class="secondary-btn seller-back-btn">Kembali</button>
@@ -52,24 +52,25 @@
             <button id="sellerNavTopBtn" class="secondary-btn">Produk Terlaris</button>
           </div>
           <div class="seller-queue-refresh">
-            <button id="refreshQueueBtn" class="refresh-queue-btn">Refresh Nomor Antrian</button>
+            <button id="refreshQueueBtn" class="refresh-queue-btn">Perbarui Nomor Antrian</button>
             <span id="queuePreviewText" class="queue-preview-text">Nomor antrean selanjutnya: -</span>
             <span id="buyerNamePreviewText" class="buyer-name-preview"><strong>Nama pembeli:</strong> -</span>
           </div>
           <div class="seller-form-box">
             <div class="field-group">
               <label for="productName">Nama Produk</label>
-              <input id="productName" type="text" placeholder="Contoh: Ayam Kampung" />
+              <input id="productName" type="text" placeholder="Contoh: ikan guppy" />
             </div>
             <div class="field-group">
               <label for="productCategory">Kategori</label>
               <select id="productCategory">
-                <option value="makanan">Makanan & Minuman</option>
-                <option value="ikan">Ikan Hias & Akuarium</option>
-                <option value="unggas">Unggas & Aksesorisnya</option>
-                <option value="pribadi">Aksesoris Pribadi</option>
-                <option value="kamar">Aksesoris Kamar Tidur</option>
-                <option value="lainnya">Bibit Sayuran</option>
+                <option value="makanan dan minuman">Makanan & Minuman</option>
+                <option value="ikan hias dan akuarium">Ikan Hias & Akuarium</option>
+                <option value="unggas dan aksesorisnya">Unggas & Aksesorisnya</option>
+                <option value="aksesoris pribadi">Aksesoris Pribadi</option>
+                <option value="kelengkapan kamar">Aksesoris Kamar Tidur</option>
+                <option value="tanaman">Bibit Sayuran</option>
+                <option value="barang pribadi"> perangkat keras, elektronik</option>
               </select>
             </div>
             <div class="field-group">
@@ -141,34 +142,35 @@
           <h2>Menu Produk</h2>
           <div class="category-tabs" role="tablist" aria-label="Kategori produk">
             <button class="category-tab active" data-filter="all">Semua</button>
-            <button class="category-tab" data-filter="makanan">Makanan & Minuman</button>
-            <button class="category-tab" data-filter="ikan">Ikan Hias & Akuarium</button>
-            <button class="category-tab" data-filter="unggas">Unggas & Aksesorisnya</button>
-            <button class="category-tab" data-filter="pribadi">Aksesoris Pribadi</button>
-            <button class="category-tab" data-filter="kamar">Aksesoris Kamar Tidur</button>
-            <button class="category-tab" data-filter="lainnya">Bibit Sayuran</button>
+            <button class="category-tab" data-filter="makanan dan minuman">Makanan & Minuman</button>
+            <button class="category-tab" data-filter="ikan hias dan akuarium">Ikan Hias & Akuarium</button>
+            <button class="category-tab" data-filter="unggas dan aksesorisnya">Unggas & Aksesorisnya</button>
+            <button class="category-tab" data-filter="kelengkapan pribadi">Aksesoris Pribadi</button>
+            <button class="category-tab" data-filter="aksesoris kamar">Aksesoris Kamar Tidur</button>
+            <button class="category-tab" data-filter="tanaman">Bibit Sayuran</button>
+            <button class="category-tab" data-filter="barang pribadi">perangkat keras, elektronik</button>
           </div>
-          <div class="category-block" data-category-group="makanan">
+          <div class="category-block" data-category-group="makanan dan minuman">
             <h3>Makanan & Minuman</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="ikan">
+          <div class="category-block" data-category-group="ikan hias dan akuarium">
             <h3>Ikan Hias & Perlengkapan Akuarium</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="unggas">
+          <div class="category-block" data-category-group="unggas dan aksesoris">
             <h3>Unggas & Aksesorisnya</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="pribadi">
+          <div class="category-block" data-category-group="kelengkapan pribadi">
             <h3>Aksesoris Pribadi</h3>
             <div class="menu-list"></div>
           </div>
 
-          <div class="category-block" data-category-group="kamar">
+          <div class="category-block" data-category-group="aksesoris kamar">
             <h3>Aksesoris Kamar Tidur</h3>
             <div class="menu-list"></div>
           </div>
@@ -181,7 +183,7 @@
 
             <div class="field-group notes-group hidden" id="notesGroup">
               <label for="notes">Catatan</label>
-              <textarea id="notes" rows="3" placeholder="Opsional: tanpa sambal, lebih pedas"></textarea>
+              <textarea id="notes" rows="3" placeholder="Opsional: manis seperti penjual."></textarea>
             </div>
 
             <div class="field-group delivery-group hidden" id="deliveryGroup">
@@ -196,13 +198,13 @@
         <section class="card result-card">
           <h2>Ringkasan Pesanan</h2>
           <div id="summary" class="summary-box">
-            <p class="muted">Belum ada pesanan.</p>
+            <p class="muted">Daftar Nama pemesanan.</p>
           </div>
 
           <div class="queue-box">
             <p class="label">Nomor Antrian</p>
             <div id="queueNumber" class="queue-number">-</div>
-            <p id="statusText" class="status">Mohon tunggu pesanan Anda Sedang Diproses</p>
+            <p id="statusText" class="status">Mohon tunggu, pesanan Anda Sedang Diproses</p>
           </div>
 
           <div class="payment-actions">
