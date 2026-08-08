@@ -132,7 +132,7 @@ if (checkoutBtn) {
             '',
             'Terima kasih 🙏'
         ];
-        const waUrl = 'https://api.whatsapp.com/send?phone=6287727114562&text=' + encodeURIComponent(lines.join('\n'));
+        const waUrl = 'https://api.whatsapp.com/send/?phone=6287727114562&text=' + encodeURIComponent(lines.join('\n'));
         try {
             const waWin = window.open(waUrl, '_blank');
             if (!waWin) window.location.href = waUrl;
