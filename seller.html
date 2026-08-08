@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Penjual - Chommell Farm</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <!-- ===== GERBANG PASSWORD PENJUAL (Keamanan) ===== -->
+    <div id="sellerLockScreen" class="seller-lock-screen">
+        <div class="seller-lock-card">
+            <div class="seller-lock-icon">🔒</div>
+            <h2>Halaman Terkunci</h2>
+            <p>Masukkan password untuk mengakses halaman penjual.</p>
+            <input type="password" id="sellerLockPassword" placeholder="Masukkan password" autocomplete="off" />
+            <button id="sellerLockBtn" class="primary-btn">Buka Halaman Penjual</button>
+            <button id="sellerLockBackBtn" class="secondary-btn seller-lock-back">Kembali ke Beranda</button>
+            <p id="sellerLockError" class="seller-lock-error hidden">Password salah. Silakan coba lagi.</p>
+        </div>
+    </div>
+
+    <div id="sellerContent" class="seller-content">
+        <div class="container">
+            <header class="hero">
+                <h2>Halaman Penjual</h2>
+                <p>Kelola produk penjualan & lihat pesanan masuk</p>
+            </header>
+
+            <div class="seller-page-actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <button id="toggleAddProductBtn" class="primary-btn" style="width:auto;margin:0;padding:11px 20px;">➕
+                    Tambah Produk</button>
+            </div>
+
+            <div class="seller-form-box hidden">
+                <h3>Tambahi Produk Baru</h3>
+                <div class="field-group">
+                    <label for="nama">Jenenge Produk</label>
+                    <input type="text" id="nama" placeholder="Nama produk" />
+                </div>
+                <div class="field-group">
+                    <label for="kategori">Kategori</label>
+                    <input type="text" id="kategori" list="kategoriList" placeholder="Pilih atau ketik kategori baru"
+                        style="padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fffdf9;font:inherit;" />
+                    <datalist id="kategoriList">
+                        <option value="makanan">Makanan & Minuman</option>
+                        <option value="ikan">Ikan Hias & Akuarium</option>
+                        <option value="unggas">Unggas & Aksesorisnya</option>
+                        <option value="pribadi">Aksesoris Pribadi</option>
+                        <option value="kamar">Aksesoris Kamar Tidur</option>
+                        <option value="lainnya">Bibit Sayuran</option>
+                    </datalist>
+                    <small class="muted">Kategori bisa diketik bebas, contoh: "mainan", "alat tulis", "sayur dan
+                        buah".</small>
+                </div>
+                <div class="field-group">
+                    <label for="harga">Harga (Rp)</label>
+                    <input type="number" id="harga" placeholder="Harga produk" />
+                </div>
+                <div class="field-group">
+                    <label for="stok">Stok (kosongkan = unlimited ♾️)</label>
+                    <input type="number" id="stok" placeholder="Kosongkan untuk stok unlimited" />
+                </div>
+                <div class="field-group">
+                    <label for="gambar">URL Gambar (opsional)</label>
+                    <input type="text" id="gambar" placeholder="https://contoh.com/gambar.jpg" />
+                </div>
+                <div class="field-group">
+                    <label for="gambarFile">Atau upload dari galeri</label>
+                    <input type="file" id="gambarFile" accept="image/*" />
+                </div>
+                <div class="field-group">
+                    <label for="variasi">Variasi produk (pisah dengan koma, opsional)</label>
+                    <input type="text" id="variasi" placeholder="Contoh: boboiboy,ochobot,amato,ying,yaya" />
+                </div>
+                <div class="field-group" style="display:flex;gap:8px;">
+                    <button id="tambahProdukBtn" class="primary-btn" style="flex:1;">Tambah</button>
+                    <button id="batalEditBtnSeller" class="secondary-btn hidden" style="flex:1;">batalno ngedit
+                    </button>
+                </div>
+            </div>
+
+            <h3>Daftar Produk Tersedia</h3>
+            <p class="product-section-desc">Semua produk yang sudah ditambahkan akan tampil di sini dan langsung
+                terlihat di
+                halaman pembeli secara real-time.</p>
+            <input type="text" id="productSearchSeller" class="product-search"
+                placeholder="🔍 Cari produk tersedia..." />
+            <div id="listproduk" class="product-grid"></div>
+
+            <hr />
+            <h3>👥 Daftar Pembeli Terdaftar (Real-time)</h3>
+            <p class="product-section-desc">Semua pembeli yang mendaftar (login) otomatis tampil di sini secara
+                real-time. Dikendalikan dari akun penjual (1 email penjual).</p>
+            <div id="buyersList" class="queue-list"></div>
+
+            <hr />
+            <h3>Ada Pesanan Baru Nih mas, semangat yaaa!</h3>
+            <div id="orders"></div>
+
+            <div id="orderActions">
+                <button id="terimaPembayaranBtn" class="secondary-btn">Bayaran bro</button>
+                <button id="selesaiPesananBtn" class="secondary-btn">Iki kanggo ning wis rampung</button>
+                <button id="batalkanPesananBtn" class="secondary-btn">Iki ning batalke</button>
+                <button id="printReceiptBtn" class="secondary-btn" style="background:#4CAF50;color:white;">🖨️ Cetak
+                    Struk</button>
+            </div>
+
+            <hr />
+            <!-- ===== DATA KEUANGAN ===== -->
+            <div id="sellerFinanceSection" class="finance-section">
+                <div class="seller-page-header"
+                    style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+                    <h3>💰 Data Keuangan</h3>
+                    <div class="seller-page-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button id="exportFinanceExcelBtn" class="secondary-btn">📥 Kirem maring Excel</button>
+                        <button id="resetFinanceBtn" class="secondary-btn" style="background:#ffd0d0;color:#c00;">🗑️
+                            Reset
+                            kabeh Data</button>
+                    </div>
+                </div>
+
+                <div class="finance-cards"
+                    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:16px 0;">
+                    <div class="finance-card finance-income"
+                        style="padding:18px 16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:1px solid rgba(0,0,0,0.06);">
+                        <div class="finance-card-label"
+                            style="font-size:0.85rem;color:#555;margin-bottom:6px;font-weight:600;">Total kabeh
+                            pemasukan
+                            mas.</div>
+                        <div class="finance-card-value" id="financeTotalIncome"
+                            style="font-size:1.3rem;font-weight:800;color:#1d7c3f;">Rp 0</div>
+                    </div>
+                    <div class="finance-card finance-qris"
+                        style="padding:18px 16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,#e3f2fd,#bbdefb);border:1px solid rgba(0,0,0,0.06);">
+                        <div class="finance-card-label"
+                            style="font-size:0.85rem;color:#555;margin-bottom:6px;font-weight:600;">Iki ning anggo qris
+                            mas.
+                        </div>
+                        <div class="finance-card-value" id="financeQrisIncome"
+                            style="font-size:1.3rem;font-weight:800;color:#2196f3;">Rp 0</div>
+                    </div>
+                    <div class="finance-card finance-dana"
+                        style="padding:18px 16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:1px solid rgba(0,0,0,0.06);">
+                        <div class="finance-card-label"
+                            style="font-size:0.85rem;color:#555;margin-bottom:6px;font-weight:600;">iki ning anggo dana
+                            mas.
+                        </div>
+                        <div class="finance-card-value" id="financeDanaIncome"
+                            style="font-size:1.3rem;font-weight:800;color:#ff5722;">Rp 0</div>
+                    </div>
+                    <div class="finance-card finance-total-orders"
+                        style="padding:18px 16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,#f3e5f5,#e1bee7);border:1px solid rgba(0,0,0,0.06);">
+                        <div class="finance-card-label"
+                            style="font-size:0.85rem;color:#555;margin-bottom:6px;font-weight:600;">iki jumlah ning
+                            pesen
+                            anggo web mas.</div>
+                        <div class="finance-card-value" id="financeTotalOrders"
+                            style="font-size:1.3rem;font-weight:800;color:#9c27b0;">0</div>
+                    </div>
+                </div>
+
+                <div class="finance-filter"
+                    style="display:flex;align-items:center;gap:10px;margin:16px 0;padding:12px 16px;background:#fffdf9;border-radius:12px;border:1px solid var(--border);">
+                    <label for="financePeriod"
+                        style="font-weight:600;color:var(--text);white-space:nowrap;">Wayah:</label>
+                    <select id="financePeriod"
+                        style="padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:white;font-size:0.95rem;cursor:pointer;flex:1;">
+                        <option value="today">Dina kiye</option>
+                        <option value="week" selected>Minggu kiye</option>
+                        <option value="month">Wulan kiye</option>
+                        <option value="year">Taun kiye</option>
+                        <option value="all">Kabeh mbok</option>
+                    </select>
+                </div>
+
+                <div class="finance-detail" style="margin:16px 0;">
+                    <h4 style="margin:0 0 12px;color:var(--text);">Rincian ning tuku</h4>
+                    <div id="financeTransactionList" class="finance-transaction-list"
+                        style="max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:12px;padding:8px;background:#fffdf9;">
+                        <p class="muted">Daftar aran ning pesen mbi tuku apa bae</p>
+                    </div>
+                </div>
+
+                <canvas id="chartFinance" width="600" height="200"
+                    style="width:100% !important;height:220px !important;margin-top:16px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="heart-logo" title="Chommell Farm ❤️">
+        <svg viewBox="0 0 24 24">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="firebase.js"></script>
+    <script src="seller.js"></script>
+</body>
+
+</html>

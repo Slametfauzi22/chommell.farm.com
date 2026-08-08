@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan - Chommell Farm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="hero">
+            <h2>Pesanan - Chommell Farm Kendaldoyong</h2>
+            <p>Kelola dan lihat status pesanan Anda</p>
+        </header>
+
+        <div class="grid">
+            <section class="card">
+                <h3>Ada Pesanan Baru Nih!</h3>
+                <div id="ordersList" class="orders-container"></div>
+            </section>
+        </div>
+
+        <div id="orderActions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;">
+            <button id="terimaPembayaranBtn" class="secondary-btn" style="background:#4CAF50;color:white;">✅ Terima
+                Pembayaran</button>
+            <button id="selesaiPesananBtn" class="secondary-btn"
+                style="background:#2196F3;color:white;">Selesai</button>
+            <button id="batalkanPesananBtn" class="secondary-btn"
+                style="background:#f44336;color:white;">Batalkan</button>
+        </div>
+    </div>
+
+    <div class="heart-logo" title="Chommell Farm ❤️">
+        <svg viewBox="0 0 24 24">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+    <script>
+        // ===== FORMAT RUPIAH =====
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
+        }
+
+        const ordersList = document.getElementById('ordersList');
+
+        // ===== LOAD PESANAN (REALTIME) =====
+        if (db && ordersList) {
+            db.collection("orders")
+                .orderBy("createdAt", "desc")
+                .onSnapshot((snapshot) => {
+                    let html = "";
+                    snapshot.forEach((doc) => {
+                        const o = doc.data();
+                        const docId = doc.id;
+                        const status = o.status || 'pending';
+                        const paymentStatus = o.paymentStatus || 'Belum Dibayar';
+
+                        let statusBadge = '';
+                        let badgeColor = '';
+                        if (status === 'selesai') { badgeColor = '#c8e6c9;color:#2e7d32'; statusBadge = 'Selesai'; }
+                        else if (status === 'dibatalkan') { badgeColor = '#ffcdd2;color:#c62828'; statusBadge = 'Dibatalkan'; }
+                        else if (status === 'dibayar' || paymentStatus === 'sudah dibayarkan') { badgeColor = '#bbdefb;color:#1565c0'; statusBadge = 'Dibayar'; }
+                        else { badgeColor = '#fff9c4;color:#f57f17'; statusBadge = 'Pending'; }
+
+                        html += `
+                            <div class="order-card" id="order-${docId}" style="padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:#fffdf9;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                                    <h3 style="margin:0;">${o.productName || o.nama || '-'}</h3>
+                                    <span style="padding:4px 12px;border-radius:999px;font-size:0.8rem;font-weight:600;background:${badgeColor}">${statusBadge}</span>
+                                </div>
+                                <p style="margin:4px 0;"><strong>Pembeli:</strong> ${o.buyerName || o.namaPemesan || '-'} (${o.buyerWhatsapp || o.nomorWA || '-'})</p>
+                                <p style="margin:4px 0;"><strong>Jumlah:</strong> ${o.qty || 1}</p>
+                                <p style="margin:4px 0;"><strong>Total:</strong> ${formatRupiah(Number(o.total || 0))}</p>
+                                <p style="margin:4px 0;"><strong>Status Pembayaran:</strong> ${paymentStatus}</p>
+                                <p style="margin:4px 0;"><strong>Antrian:</strong> ${o.queueNumber || '-'}</p>
+                                <p style="margin:4px 0;"><strong>Catatan:</strong> ${o.notes || '-'}</p>
+                                <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+                                    ${paymentStatus !== 'sudah dibayarkan' && status !== 'selesai' && status !== 'dibatalkan' ? `
+                                        <button onclick="tandaiDibayarkan('${docId}')" style="padding:8px 14px;background:#4CAF50;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">✅ Telah Dibayarkan</button>
+                                    ` : ''}
+                                    ${status !== 'selesai' && status !== 'dibatalkan' ? `
+                                        <button onclick="selesaiPesanan('${docId}')" style="padding:8px 14px;background:#2196F3;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Selesai</button>
+                                        <button onclick="batalkanPesanan('${docId}')" style="padding:8px 14px;background:#f44336;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Batalkan</button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    ordersList.innerHTML = html || '<p class="muted">Belum ada pesanan masuk.</p>';
+                }, (error) => {
+                    console.error('Error loading orders:', error);
+                    ordersList.innerHTML = '<p class="muted">Gagal memuat pesanan.</p>';
+                });
+        } else if (ordersList) {
+            ordersList.innerHTML = '<p class="muted">Database tidak terhubung.</p>';
+        }
+
+        // ===== FUNGSI AKSI PESANAN =====
+        window.tandaiDibayarkan = function (id) {
+            if (!confirm('Tandai pesanan ini sudah dibayarkan?')) return;
+            db.collection("orders").doc(id).update({
+                paymentStatus: "sudah dibayarkan",
+                status: "dibayar"
+            }).then(() => {
+                alert('✅ Pesanan ditandai sudah dibayarkan');
+            }).catch((error) => {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            });
+        };
+
+        window.selesaiPesanan = function (id) {
+            if (!confirm('Tandai pesanan ini sebagai selesai?')) return;
+            db.collection("orders").doc(id).update({
+                status: "selesai"
+            }).then(() => {
+                alert('✅ Pesanan selesai');
+            }).catch((error) => {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            });
+        };
+
+        window.batalkanPesanan = function (id) {
+            if (!confirm('Batalkan pesanan ini?')) return;
+            db.collection("orders").doc(id).update({
+                status: "dibatalkan"
+            }).then(() => {
+                alert('✅ Pesanan dibatalkan');
+            }).catch((error) => {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            });
+        };
+
+        // ===== TOMBOL AKSI BAWAH =====
+        document.getElementById('terimaPembayaranBtn').addEventListener('click', async function () {
+            const allOrderCards = document.querySelectorAll('.order-card');
+            let targetId = null;
+            for (const card of allOrderCards) {
+                const payBtnInCard = card.querySelector('button[onclick*="tandaiDibayarkan"]');
+                if (payBtnInCard && card.id) {
+                    targetId = card.id.replace('order-', '');
+                    break;
+                }
+            }
+            if (!targetId) {
+                alert('Tidak ada pesanan yang perlu ditandai dibayar.');
+                return;
+            }
+            if (!confirm('Tandai pesanan terbaru yang belum dibayar?')) return;
+            try {
+                await db.collection("orders").doc(targetId).update({
+                    paymentStatus: "sudah dibayarkan",
+                    status: "dibayar"
+                });
+                alert('✅ Pesanan ditandai sudah dibayarkan');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            }
+        });
+
+        document.getElementById('selesaiPesananBtn').addEventListener('click', async function () {
+            const allOrderCards = document.querySelectorAll('.order-card');
+            let targetId = null;
+            for (const card of allOrderCards) {
+                const selesaiBtn = card.querySelector('button[onclick*="selesaiPesanan"]');
+                if (selesaiBtn && card.id) {
+                    targetId = card.id.replace('order-', '');
+                    break;
+                }
+            }
+            if (!targetId) {
+                alert('Tidak ada pesanan aktif yang bisa ditandai selesai.');
+                return;
+            }
+            if (!confirm('Tandai pesanan ini sebagai selesai?')) return;
+            try {
+                await db.collection("orders").doc(targetId).update({ status: "selesai" });
+                alert('✅ Pesanan selesai');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            }
+        });
+
+        document.getElementById('batalkanPesananBtn').addEventListener('click', async function () {
+            const allOrderCards = document.querySelectorAll('.order-card');
+            let targetId = null;
+            for (const card of allOrderCards) {
+                const batalkanBtn = card.querySelector('button[onclick*="batalkanPesanan"]');
+                if (batalkanBtn && card.id) {
+                    targetId = card.id.replace('order-', '');
+                    break;
+                }
+            }
+            if (!targetId) {
+                alert('Tidak ada pesanan aktif yang bisa dibatalkan.');
+                return;
+            }
+            if (!confirm('Batalkan pesanan ini?')) return;
+            try {
+                await db.collection("orders").doc(targetId).update({ status: "dibatalkan" });
+                alert('✅ Pesanan dibatalkan');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Gagal: ' + error.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

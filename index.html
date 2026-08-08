@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistem pemesanan chommell farm</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Sistem Pemesanan <b><i class="stile">Chommell Farm Kendaldoyong</i></b></p>
+        <h1>Pilih Menu, Terima Nomor Antrian, Bisa Bayar via Dana maupun QRIS</h1>
+        <p>Cukup pilih menu favorit Anda, dapatkan nomor antrean dan dapatkan kemudahan dalam proses pemesanan.
+          Chommell Farm Kendaldoyong,</p>
+        <p>"Melayani Dengan Setulus Hati." </p>
+      </div>
+    </header>
+
+    <section class="login-screen" id="loginScreen">
+      <div class="login-card">
+        <h2>Masuk ke halaman pemesanan digital</h2>
+        <p>Pilih peran Anda untuk mulai menggunakan website.</p>
+        <div class="login-buttons">
+          <button id="buyerLoginBtn" class="login-btn buyer-btn">Masuk sebagai Pembeli</button>
+          <button id="sellerStepBtn" class="login-btn seller-btn">Masuk sebagai Penjual</button>
+        </div>
+
+        <!-- Buyer Login Form (name + WhatsApp) -->
+        <div class="seller-form hidden login-anim-form" id="buyerForm">
+          <label for="buyerNameInput">Nama Lengkap</label>
+          <input id="buyerNameInput" type="text" placeholder="Contoh: Wulandari annisa putri" />
+          <label for="buyerWhatsappInput">Nomor WhatsApp</label>
+          <input id="buyerWhatsappInput" type="tel" placeholder="Contoh: 083861785839" />
+          <button id="buyerConfirmBtn" class="primary-btn">Konfirmasi & Masuk</button>
+        </div>
+
+        <div class="seller-form hidden login-anim-form" id="sellerForm">
+          <label for="adminEmail">Masukkan Email Penjual</label>
+          <input id="adminEmail" type="email" placeholder="Stay_with_you@gmail.com" />
+          <button id="adminLoginBtn" class="primary-btn"> Selamat Datang Slamet Fauzi</button>
+          <hr style="margin:16px 0;border-color:var(--border);" />
+          <p style="text-align:center;color:var(--muted);font-size:0.9rem;">Atau buka langsung halaman penjual:</p>
+          <a href="seller.html" class="primary-btn" style="display:block;text-align:center;text-decoration:none;">🚪
+            Buka Halaman Penjual ( halaman ini khusus akses masuk anda Muhammad Syarifudin)</a>
+        </div>
+        <p class="login-note">Pembeli wajib mengisi nama & nomor WhatsApp. Ini hanya sebagai data orang yang mendaftar.
+          Terimakasih.</p>
+      </div>
+    </section>
+
+    <main class="grid hidden" id="appMain">
+      <section class="card seller-card hidden" id="sellerPanel">
+        <div class="seller-panel-header">
+          <div>
+            <h2>Kang Slamet Fauzi</h2>
+            <p>welcome to Chommell Farm kendal</p>
+          </div>
+          <div class="seller-panel-actions">
+            <!-- Hamburger Menu 3 Strip -->
+            <div class="hamburger-menu">
+              <button id="hamburgerToggle" class="hamburger-btn" aria-label="Menu Navigasi">☰</button>
+              <div id="hamburgerDropdown" class="hamburger-dropdown hidden">
+                <button id="hamburgerAddProduct" class="hamburger-item">➕ Tambah Produk Baru</button>
+                <button id="hamburgerMenuProduk" class="hamburger-item">📋 Menu Produk</button>
+                <button id="hamburgerQueue" class="hamburger-item">🔄 Daftar Antrian</button>
+                <button id="hamburgerBuyers" class="hamburger-item">👥 Daftar Pembeli</button>
+                <button id="hamburgerFinance" class="hamburger-item">💰 Data Keuangan</button>
+                <button id="hamburgerQris" class="hamburger-item">📊 Grafik QRIS</button>
+                <button id="hamburgerTop" class="hamburger-item">🏆 Produk Terlaris</button>
+                <button id="hamburgerAnalytics" class="hamburger-item">📈 Analitik Transaksi</button>
+                <button id="hamburgerReceipt" class="hamburger-item">🧾 Cetak Struk</button>
+              </div>
+            </div>
+            <button id="sellerBackBtn" class="secondary-btn seller-back-btn">Kembali</button>
+          </div>
+        </div>
+        <div class="seller-panel-nav">
+          <button id="sellerNavMenuBtn" class="secondary-btn">Menu Produk</button>
+          <button id="openQueuePageBtn" class="secondary-btn seller-nav-btn">Daftar Nama & Nomor Antrian</button>
+          <button id="printReceiptBtn" class="secondary-btn seller-nav-btn">Cetak Struk (JPG)</button>
+          <button id="sellerNavQrisBtn" class="secondary-btn">Grafik Pembayaran via QRIS</button>
+          <button id="sellerNavTopBtn" class="secondary-btn">Produk Terlaris</button>
+          <button id="sellerBuyersListBtn" class="secondary-btn seller-nav-btn">Daftar Nama Pembeli</button>
+          <button id="sellerNavAnalyticsBtn" class="secondary-btn">Analitik Transaksi</button>
+          <button id="sellerNavFinanceBtn" class="secondary-btn">💰 Data Keuangan</button>
+        </div>
+        <div class="seller-queue-refresh">
+          <button id="refreshQueueBtn" class="refresh-queue-btn">Perbarui Nomor Antrian</button>
+          <span id="queuePreviewText" class="queue-preview-text">Nomor antrean selanjutnya: -</span>
+          <span id="buyerNamePreviewText" class="buyer-name-preview"><strong>Nama pembeli:</strong> -</span>
+        </div>
+        <div class="seller-form-box">
+          <div class="field-group">
+            <label for="productName">Nama Produk</label>
+            <input id="productName" type="text" placeholder="Boboiboy Galaksi2" />
+          </div>
+          <div class="field-group">
+            <label for="productCategory">Kategori</label>
+            <input type="text" id="productCategory" list="productCategoryList"
+              placeholder="Pilih atau ketik kategori baru" />
+            <datalist id="productCategoryList">
+              <option value="makanan">Makanan & Minuman</option>
+              <option value="ikan">Ikan Hias & Akuarium</option>
+              <option value="unggas">Unggas & Aksesorisnya</option>
+              <option value="pribadi">Aksesoris Pribadi</option>
+              <option value="kamar">Aksesoris Kamar Tidur</option>
+              <option value="lainnya">Bibit Sayuran</option>
+            </datalist>
+          </div>
+
+          <div class="field-group">
+            <label for="productPrice">Harga</label>
+            <input id="productPrice" type="number" placeholder="Contoh: 50000" />
+          </div>
+          <div class="field-group">
+            <label for="productStock">Stok</label>
+            <input id="productStock" type="number" min="0" placeholder="Contoh: 10" value="10" />
+          </div>
+          <div class="field-group">
+            <label for="productImage">URL Gambar (opsional)</label>
+            <input id="productImage" type="text" placeholder="https://contoh.com/gambar.jpg" />
+          </div>
+          <div class="field-group">
+            <label for="productImageFile">Atau pilih dari galeri</label>
+            <input id="productImageFile" type="file" accept="image/*" />
+          </div>
+          <div class="field-group">
+            <label for="productVariations">Variasi produk (pisah dengan koma, opsional)</label>
+            <input id="productVariations" type="text"
+              placeholder="Contoh: boboiboy,ochobot,amato,ying,yaya,gopal,fank,tok abah" />
+          </div>
+          <div class="seller-form-actions">
+            <button id="addProductBtn" class="primary-btn">Tambah Produk</button>
+            <button id="saveProductBtn" class="secondary-btn hidden">Simpan Perubahan</button>
+            <button id="cancelEditBtn" class="secondary-btn hidden">Batal Edit</button>
+          </div>
+        </div>
+        <div id="sellerMenuSection">
+          <div class="seller-alert muted">Produk akan muncul setelah ditambahkan.</div>
+          <div class="seller-products-list" id="sellerProductsList"></div>
+        </div>
+        <div id="sellerQrisSection" class="hidden seller-content-section">
+          <div class="seller-page-header">
+            <h3>Grafik Pembayaran via QRIS (12 bulan)</h3>
+            <div class="seller-page-actions">
+              <button id="exportExcelBtn" class="secondary-btn">Kirem ring Excel</button>
+            </div>
+          </div>
+          <img id="chartIncomeQrisImg" class="chart-image hidden" alt="Grafik QRIS" />
+          <canvas id="chartIncomeQris" width="400" height="180" class="hidden"></canvas>
+        </div>
+        <div id="sellerTopSection" class="hidden seller-content-section">
+          <div class="seller-page-header">
+            <h3>Produk Terlaris (12 bulan)</h3>
+          </div>
+          <img id="chartTopProductsImg" class="chart-image hidden" alt="Produk Terlaris" />
+          <canvas id="chartTopProducts" width="400" height="180" class="hidden"></canvas>
+        </div>
+        <div id="sellerAnalyticsSection" class="hidden seller-content-section">
+          <div class="transactions-analytics">
+            <label for="txnAggSelect">Analitik Transaksi:</label>
+            <select id="txnAggSelect">
+              <option value="dayOfWeek">Per Hari (nama hari)</option>
+              <option value="daily" selected>Per Tanggal (30 hari terakhir)</option>
+              <option value="monthly">Per Bulan (12 bulan terakhir)</option>
+              <option value="yearly">Per Tahun</option>
+            </select>
+            <canvas id="chartTransactions" width="600" height="240"></canvas>
+          </div>
+        </div>
+        <div id="sellerFinanceSection" class="hidden seller-content-section finance-section">
+          <div class="seller-page-header">
+            <h3>💰 Data Keuangan Farm</h3>
+            <div class="seller-page-actions">
+              <button id="exportFinanceExcelBtn" class="secondary-btn">Kirem ring Excel</button>
+              <button id="resetFinanceBtn" class="secondary-btn" style="background:#ffd0d0;color:#c00;">Reset Semua
+                Data</button>
+            </div>
+          </div>
+          <div class="finance-cards">
+            <div class="finance-card finance-income">
+              <div class="finance-card-label">Total Pendapatan</div>
+              <div class="finance-card-value" id="financeTotalIncome">Rp 0</div>
+            </div>
+            <div class="finance-card finance-qris">
+              <div class="finance-card-label">Pemasukan via QRIS</div>
+              <div class="finance-card-value" id="financeQrisIncome">Rp 0</div>
+            </div>
+            <div class="finance-card finance-dana">
+              <div class="finance-card-label">Pemasukan via Dana</div>
+              <div class="finance-card-value" id="financeDanaIncome">Rp 0</div>
+            </div>
+            <div class="finance-card finance-total-orders">
+              <div class="finance-card-label">Total Pesanan</div>
+              <div class="finance-card-value" id="financeTotalOrders">0</div>
+            </div>
+          </div>
+          <div class="finance-filter">
+            <label for="financePeriod">Periode:</label>
+            <select id="financePeriod">
+              <option value="today">Hari Ini</option>
+              <option value="week" selected>Minggu Ini</option>
+              <option value="month">Bulan Ini</option>
+              <option value="year">Tahun Ini</option>
+              <option value="all">Semua Waktu</option>
+            </select>
+          </div>
+          <div class="finance-detail">
+            <h4>Rincian Transaksi</h4>
+            <div id="financeTransactionList" class="finance-transaction-list">
+              <p class="muted">Tidak ada transaksi untuk periode ini.</p>
+            </div>
+          </div>
+          <canvas id="chartFinance" width="600" height="200"></canvas>
+        </div>
+      </section>
+
+      <section class="card hidden" id="sellerQueuePage">
+        <div class="seller-queue-header">
+          <button id="closeQueuePageBtn" class="secondary-btn">Kembali</button>
+          <h2>Daftar Nama & Nomor Antrian</h2>
+          <p class="muted">semua data akan terinput disini. dan akan diperbarui jika menekan tombol pembaruan antrian.
+          </p>
+        </div>
+        <div class="seller-queue-content">
+          <ol id="queueList" class="queue-list"></ol>
+        </div>
+      </section>
+
+      <section class="card hidden" id="sellerBuyersPage">
+        <div class="seller-queue-header">
+          <button id="closeBuyersPageBtn" class="secondary-btn">Kembali</button>
+          <h2>Daftar Nama Pembeli</h2>
+          <p class="muted">Semua data login pembeli (nama & nomor WhatsApp) yang pernah masuk.</p>
+        </div>
+        <div class="seller-queue-content">
+          <div id="buyersList" class="queue-list"></div>
+        </div>
+      </section>
+
+      <section class="card payment-card sticky-menu-panel" style="position:sticky;top:16px;z-index:20;">
+        <h2>Daftar Menu Produk</h2>
+        <div class="category-tabs" role="tablist" aria-label="Kategori produk">
+          <button class="category-tab active" data-filter="all">Semua</button>
+          <button class="category-tab" data-filter="makanan">Makanan & Minuman</button>
+          <button class="category-tab" data-filter="ikan">Ikan Hias & Akuarium</button>
+          <button class="category-tab" data-filter="unggas">Unggas & Aksesorisnya</button>
+          <button class="category-tab" data-filter="pribadi">Aksesoris Pribadi</button>
+          <button class="category-tab" data-filter="kamar">Aksesoris Kamar Tidur</button>
+          <button class="category-tab" data-filter="lainnya">Bibit Sayuran</button>
+        </div>
+        <div class="category-block" data-category-group="makanan">
+          <h3>Makanan & Minuman</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div class="category-block" data-category-group="ikan">
+          <h3>Ikan Hias & Perlengkapan Akuarium</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div class="category-block" data-category-group="unggas">
+          <h3>Unggas & Aksesorisnya</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div class="category-block" data-category-group="pribadi">
+          <h3>Aksesoris Pribadi</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div class="category-block" data-category-group="kamar">
+          <h3>Aksesoris Kamar Tidur</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div class="category-block" data-category-group="lainnya">
+          <h3>Bibit Sayuran</h3>
+          <div class="menu-list"></div>
+        </div>
+
+        <div id="orderControls">
+          <div class="field-group">
+            <label for="customerName">Nama Pemesan</label>
+            <input id="customerName" type="text" placeholder="Contoh: Wulandari" />
+          </div>
+
+          <div class="field-group notes-group hidden" id="notesGroup">
+            <label for="notes">Catatan</label>
+            <textarea id="notes" rows="3" placeholder="Opsional: manis seperti penjual "></textarea>
+          </div>
+
+          <div class="field-group delivery-group hidden" id="deliveryGroup">
+            <label for="deliveryAddress">Delivery (opsional) - Alamat lengkap</label>
+            <textarea id="deliveryAddress" rows="2"
+              placeholder="Alamat lengkap untuk pengantaran (opsional)"></textarea>
+          </div>
+
+          <button id="orderBtn" class="primary-btn">Buat Pesanan & Kirim WhatsApp</button>
+        </div>
+      </section>
+
+      <section class="card result-card">
+        <h2>Ringkasan Pesanan</h2>
+        <div id="summary" class="summary-box">
+          <p class="muted">Daftar Nama & Nomor Antrian</p>
+        </div>
+
+        <div class="queue-box">
+          <p class="label">Nomor Antrian Anda</p>
+          <div id="queueNumber" class="queue-number">-</div>
+          <p id="statusText" class="status">Mohon tunggu, pesanan Anda Sedang Diproses</p>
+        </div>
+
+        <div class="payment-actions">
+          <button id="payBtn" class="secondary-btn qris-btn" disabled>Bayar via Dana</button>
+          <a id="qrisBtn" class="qris-btn" href="https://photos.app.goo.gl/Bw2TnpoNa7uG3Khc9" target="_blank"
+            rel="noopener noreferrer">Bayar via QRIS</a>
+        </div>
+        <div class="qris-card">
+          <img class="qris-image" src="https://photos.app.goo.gl/Bw2TnpoNa7uG3Khc9" alt="Kode QRIS pembayaran"
+            loading="eager" decoding="async" />
+          <p class="qris-caption">Scan kode QRIS Fauzi Farm untuk pembayaran cepat dan aman.</p>
+        </div>
+        <p id="paymentInfo" class="payment-info">Pilih pesanan terlebih dahulu untuk melanjutkan pembayaran.</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="heart-logo" title="Chommell Farm ❤️">
+    <svg viewBox="0 0 24 24">
+      <path
+        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+    </svg>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

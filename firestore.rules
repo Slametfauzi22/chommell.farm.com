@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Izinkan semua perangkat membaca & menulis koleksi yang dibutuhkan
+    // agar produk, pesanan, antrian, dan pembeli tersinkron real-time.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
