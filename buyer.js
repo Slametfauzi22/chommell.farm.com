@@ -489,7 +489,7 @@ function activateBuyerOrderBtn() {
             if (notes) lines.push(`📝 Catatan: ${notes}`);
             if (deliveryAddress) lines.push(`📍 Alamat: ${deliveryAddress}`);
             lines.push('', 'Terima kasih 🙏');
-            const url = 'https://api.whatsapp.com/send?phone=6287727114562&text=' + encodeURIComponent(lines.join('\n'));
+            const url = 'https://api.whatsapp.com/send/?phone=6287727114562&text=' + encodeURIComponent(lines.join('\n'));
             window.open(url, '_blank');
         }
 
