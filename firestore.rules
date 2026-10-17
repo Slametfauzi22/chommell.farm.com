@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSeller() {
+      return request.auth != null &&
+        request.auth.token.email == 'slametfauzi2003@gmail.com';
+    }
+
+    function isValidBuyerRecord() {
+      return request.resource.data.keys().hasAll(['name', 'whatsapp', 'loginAt']) &&
+        request.resource.data.name is string &&
+        request.resource.data.whatsapp is string &&
+        request.resource.data.loginAt is number;
+    }
+
+    function isValidOrderRecord() {
+      return request.resource.data.keys().hasAll(['buyerName', 'buyerWhatsapp', 'total', 'status', 'createdAt']) &&
+        request.resource.data.buyerName is string &&
+        request.resource.data.buyerWhatsapp is string &&
+        request.resource.data.total is number &&
+        request.resource.data.status is string &&
+        request.resource.data.createdAt is timestamp;
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isSeller();
+    }
+
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if isValidOrderRecord();
+      allow update, delete: if isSeller();
+    }
+
+    match /registeredBuyers/{buyerId} {
+      allow read: if true;
+      allow create: if isValidBuyerRecord();
+      allow update, delete: if isSeller();
+    }
+
+    match /{document=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+  }
+}

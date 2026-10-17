@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Chommell Farm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-screen">
+            <div class="login-card login-expand">
+                <h2>Login Pembeli</h2>
+                <p>Masukkan nama dan nomor WhatsApp Anda untuk mulai login otomatis.</p>
+                <div class="seller-form login-seller-form login-expand">
+                    <label for="buyerName">Nama Lengkap</label>
+                    <input id="buyerName" type="text" placeholder="Contoh: Wulandari annisa putri" required />
+
+                    <label for="buyerWhatsapp">Nomor WhatsApp</label>
+                    <input id="buyerWhatsapp" type="tel" placeholder="Contoh: 083861785839" required />
+
+                    <button id="buyerLoginConfirmBtn" class="primary-btn">Masuk sebagai Pembeli</button>
+                </div>
+                <p class="login-note">Data Anda hanya digunakan untuk proses pemesanan dan pemanggilan melalui webside
+                    chommell farm.</p>
+                <script>
+                    // Animasi mengembang saat halaman login dimuat
+                    (function () {
+                        var form = document.querySelector('.login-seller-form');
+                        if (!form) return;
+                        setTimeout(function () {
+                            form.classList.add('login-expand');
+                            form.classList.remove('login-seller-form');
+                        }, 100);
+                    })();
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="heart-logo" title="Chommell Farm ❤️">
+        <svg viewBox="0 0 24 24">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>
